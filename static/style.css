@@ -1,0 +1,11 @@
+.search-area{
+    text-align: center;
+    margin-top: 100px;
+    margin-left: 100px;
+}
+
+#map{
+    height: 80%;
+    width: 90%;
+    margin: 3em;
+}

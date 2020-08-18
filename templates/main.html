@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/style.css">
+
+    <title>エリア探し</title>
+  </head>
+  <body>
+
+    <h1>Find your home!</h1>
+
+  <div class = "search-area">
+  <form class="form-search" method = "POST" action = "">{% csrf_token%}
+  
+  <div class="item">
+    <label class="label">駅名：</label>
+    <select name="station">
+      <option value="35.658034,139.701636">渋谷</option>
+      <option value="35.611572,139.626586">二子玉川</option>
+      <option value="35.656134,139.736881">麻布十番</option>
+    </select>
+  </div>
+  
+  <div class="item">
+    <label class="label">施設名：</label>
+    <input id="zirou" type="checkbox" name="ramen" value="zirou"><label for="zirou">二郎</label>
+    <input id="iekei" type="checkbox" name="ramen" value="iekei"><label for="iekei">家系</label>
+    <input id="mazesoba" type="checkbox" name="ramen" value="mazesoba"><label for="mazesoba">まぜそば</label>
+  </div>
+
+  <div class="item">
+    <label class="label">徒歩何分：</label>
+    <select name="walktime">
+      <option value="one">1分以内</option>
+      <option value="five">5分以内</option>
+      <option value="seven">7分以内</option>
+      <option value="ten">10分以内</option>
+      <option value="fifteen">15分以内</option>
+    </select>
+  </div>
+
+  <div class="btn-area">
+    
+    <input type="submit" value="該当エリアを表示">
+
+    <input type="reset" value="リセット">
+  </div>
+
+</form>
+</div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  </body>
+</html>

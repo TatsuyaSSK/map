@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>map page</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 80%;
+        width: 90%;
+        margin-left: auto;
+        margin-top: auto;
+        margin-right: auto;
+        margin-bottom: auto;
+
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>search results</h1>
+
+    <form class="back-button" method = "POST" action = "">{% csrf_token%}
+      <div class="btn-area">
+      <input type="button" value="検索条件を変更する" onClick="javascript:history.go(-1);">
+    
+      </div>
+      </form>
+
+    <div id="map"></div>
+    <script>
+      
+      function initMap() {
+        // 地図の中心点を、request.POSTに合わせて変更する
+        var mapLatLng = new google.maps.LatLng({{station}});
+        var Options = {
+        zoom: 15, //地図の縮尺値
+        center: mapLatLng
+        };
+        var map = new google.maps.Map(document.getElementById('map'), Options);
+
+      }
+
+      function readTextFile(file,callback){
+        var rawFile = new XMLHttpRequest();
+        rawFile.overrideMimeType("text/json");
+        rawFile.open("GET",file,true);
+        rawFile.onreadystatechange = function(){
+          if (rawFile.readyState == 4 & rawFile.status == "200"){
+            callback(rawFile.responseText);
+          }
+        }
+        rawFile.send(null);
+      }
+
+      readTextFile("./tabelog_shimokita.json",function(text){
+        var data = JSON.parse(text);
+        console.log(data.length);
+      })
+
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8Yh7th8MH0X_hrUV2gtHYktjQql0TlHA&callback=initMap"
+    async defer></script>
+  </body>
+</html>
