@@ -9,21 +9,22 @@ def mainfunc(request):
     if request.method == "POST":
         #駅、チェックボックスのあるなしで、どのjsonファイルを開くか限定する
         station = request.POST["station"]
-        lesson = request.POST.getlist("lesson")
+        lessons = request.POST.getlist("lessons")
         json_files = []
-        for les in lesson:
-            json_open = open("static/{station}/{les}.json".format(station = station,les = les),"r")
+        for lesson in lessons:
+            json_open = open("static/{station}/{lesson}.json".format(station = station,lesson = lesson),"r")
             json_load = json.load(json_open)
-            json_files.append(json_load)
-            #requestと共に、station,ramen,walktime が取得できる 
-        dic = dict(list(enumerate(json_files)))
-        dic = {
-            "station":request.POST["station"],
-            "walktime":request.POST["walktime"],
-            #受け渡すjsonファイルをチェックの有無によって決定
-            "tabelog":json.dumps(json_files[0][0:30],ensure_ascii=False),
-            "tabelog2":json.dumps(json_files[1][30:60],ensure_ascii=False),
-        }
+            json_dumps = json.dumps(json_load[0:30], ensure_ascii=False)
+            #試しに10個渡す
+            json_files.append(json_dumps)
+
+        #辞書型配列を作成
+        dic = dict(zip(lessons,json_files))
+        dic["station"] = request.POST["station"]
+        dic["walktime"] = request.POST["walktime"]
+        dic["lessons"] = request.POST.getlist("lessons")
+
+        #map.htmlに渡す
         return render(request,"map.html",dic)
         
     return render(request,"main.html",{})
