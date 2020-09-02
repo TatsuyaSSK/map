@@ -7,7 +7,6 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="static/style.css">
 
     <title>エリア探し</title>
   </head>
@@ -24,24 +23,25 @@
       <option value="35.658034,139.701636">渋谷</option>
       <option value="35.611572,139.626586">二子玉川</option>
       <option value="35.656134,139.736881">麻布十番</option>
+      <option value="35.6619, 139.6669">下北沢</option>
     </select>
   </div>
   
   <div class="item">
-    <label class="label">施設名：</label>
-    <input id="zirou" type="checkbox" name="ramen" value="zirou"><label for="zirou">二郎</label>
-    <input id="iekei" type="checkbox" name="ramen" value="iekei"><label for="iekei">家系</label>
-    <input id="mazesoba" type="checkbox" name="ramen" value="mazesoba"><label for="mazesoba">まぜそば</label>
+    <label class="label">習い事：</label>
+    <input id="zirou" type="checkbox" name="lesson" value="swimming"><label for="swimming">水泳教室</label>
+    <input id="iekei" type="checkbox" name="lesson" value="cram"><label for="cram">塾</label>
+    <input id="mazesoba" type="checkbox" name="lesson" value="english"><label for="english">英会話教室</label>
   </div>
 
   <div class="item">
     <label class="label">徒歩何分：</label>
     <select name="walktime">
-      <option value="one">1分以内</option>
-      <option value="five">5分以内</option>
-      <option value="seven">7分以内</option>
-      <option value="ten">10分以内</option>
-      <option value="fifteen">15分以内</option>
+      <option value="1">1分以内</option>
+      <option value="5">5分以内</option>
+      <option value="7">7分以内</option>
+      <option value="10">10分以内</option>
+      <option value="15">15分以内</option>
     </select>
   </div>
 

@@ -4,10 +4,10 @@
     <title>map page</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <style>
+    <style type="text/css">
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-      #map {
+       #map {
         height: 80%;
         width: 90%;
         margin-left: auto;
@@ -23,51 +23,115 @@
         padding: 0;
       }
     </style>
+    
   </head>
+
   <body>
+
     <h1>search results</h1>
 
     <form class="back-button" method = "POST" action = "">{% csrf_token%}
       <div class="btn-area">
       <input type="button" value="検索条件を変更する" onClick="javascript:history.go(-1);">
-    
       </div>
-      </form>
+    </form>
 
-    <div id="map"></div>
+    
     <script>
-      
+      // 必要なデータの読み込み
+      var data1 = JSON.parse('{{tabelog|safe}}')
+      var data2 = JSON.parse('{{tabelog2|safe}}')
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8Yh7th8MH0X_hrUV2gtHYktjQql0TlHA"></script>
+    <div id="map"></div>
+
+    <script>
+      //マップ、マーカーの生成
+      var map;
       function initMap() {
-        // 地図の中心点を、request.POSTに合わせて変更する
         var mapLatLng = new google.maps.LatLng({{station}});
         var Options = {
         zoom: 15, //地図の縮尺値
         center: mapLatLng
         };
-        var map = new google.maps.Map(document.getElementById('map'), Options);
-
+        map = new google.maps.Map(document.getElementById('map'), Options);
       }
+
+      initMap();
 
       function readTextFile(file,callback){
-        var rawFile = new XMLHttpRequest();
-        rawFile.overrideMimeType("text/json");
-        rawFile.open("GET",file,true);
-        rawFile.onreadystatechange = function(){
-          if (rawFile.readyState == 4 & rawFile.status == "200"){
-            callback(rawFile.responseText);
-          }
-        }
-        rawFile.send(null);
+        callback()
       }
 
-      readTextFile("./tabelog_shimokita.json",function(text){
-        var data = JSON.parse(text);
-        console.log(data.length);
+      var iconBase =
+            'https://developers.google.com/maps/documentation/javascript/examples/full/images/';
+          
+          var icons = {
+          library: {
+            icon: iconBase + 'library_maps.png'
+          },
+          parking:{
+            icon: iconBase + 'parking_lot_maps.png'
+          }
+          };
+
+      readTextFile("",function(){
+        for(let index = 0; index < 30; index++){
+          var element = data1[index];
+          var lat =  element["緯度"];
+          var lon = element["経度"];
+          var latlon = new google.maps.LatLng(lat,lon);
+          var marker = new google.maps.Marker({
+            position: latlon,
+            icon:icons["library"].icon,
+            map: map
+          });
+          var circle = new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.5,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.05,
+            map: map,
+            center: latlon,
+            //徒歩1分=80mで計算
+            radius: 80 * {{walktime}}
+          });
+
+        }
       })
 
+      readTextFile("",function(){
+        for(let index = 0; index < 30; index++){
+          var element = data2[index];
+          var lat =  element["緯度"];
+          var lon = element["経度"];
+          var latlon = new google.maps.LatLng(lat,lon);
+          var marker = new google.maps.Marker({
+            position: latlon,
+            icon:icons["parking"].icon,
+            map: map
+          });
+          var circle = new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.5,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.05,
+            map: map,
+            center: latlon,
+            //徒歩1分=80mで計算
+            radius: 80 * {{walktime}}
+          });
+
+        }
+      })
+
+    
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8Yh7th8MH0X_hrUV2gtHYktjQql0TlHA&callback=initMap"
-    async defer></script>
+  
   </body>
+
 </html>
