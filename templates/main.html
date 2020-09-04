@@ -1,65 +1,97 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <title>習い事マップ</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style type="text/css">
+  @charset "utf-8";
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+header{
+  margin-top: 80px;
+  color: #43A047;
+}
+hr{
+  width: 60%;
+  border-width: 1.5px;
+  border-color: #43A047;
+  margin-bottom: 70px;
+  margin-top: 70px;
+}
+h1{
+  font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+  text-align: center;
+}
 
-    <title>エリア探し</title>
-  </head>
-  <body>
+.address{
+  width:300px;
+}
+.align-light{
+    text-align: right;
+}
 
-    <h1>Find your home!</h1>
+.container{
+  text-align: center;
+}
 
-  <div class = "search-area">
-  <form class="form-search" method = "POST" action = "">{% csrf_token%}
-  
-  <div class="item">
-    <label class="label">駅名：</label>
-    <select name="station">
-      <option value="35.658034,139.701636">渋谷</option>
-      <option value="35.611572,139.626586">二子玉川</option>
-      <option value="35.656134,139.736881">麻布十番</option>
-      <option value="35.6619, 139.6669">下北沢</option>
-    </select>
-  </div>
-  
-  <div class="item">
-    <label class="label">習い事：</label>
-    <input id="zirou" type="checkbox" name="lessons" value="swimming"><label for="swimming">水泳教室</label>
-    <input id="iekei" type="checkbox" name="lessons" value="cram"><label for="cram">塾</label>
-    <input id="mazesoba" type="checkbox" name="lessons" value="english"><label for="english">英会話教室</label>
-  </div>
+.item{
+  margin-bottom: 30px;
+}
+footer p{
+  text-align: center;
+}
+input[type="email"]:invalid{
+  background: #ffcdd2;
+}
+input:valid{
+  background: transparent;
+}
+input:focus{
+  background: #DCEDC8;
+}
+.pulldown{
+  width: 200px;
+}
+  </style>
+</head>
 
-  <div class="item">
-    <label class="label">徒歩何分：</label>
-    <select name="walktime">
-      <option value="1">1分以内</option>
-      <option value="5">5分以内</option>
-      <option value="7">7分以内</option>
-      <option value="10">10分以内</option>
-      <option value="15">15分以内</option>
-    </select>
-  </div>
+<body>
+    <div class="container">
+        <header>
+           <div class="row">
+                    <h1>検索条件を指定してください</h1>
+            </div>
+        </header>
+    </div>
 
-  <div class="btn-area">
+    <hr>
     
-    <input type="submit" value="該当エリアを表示">
+    <div class="container">
+      <form class="form-search" method = "POST" action = "">{% csrf_token%}
+        <div class = "item">
+          <label class="station">候補先の市区町村/番地：</label>
+          <input type="text" name="address" id="name" class = "address" placeholder="例：新宿区西新宿1-2-3" autocomplete="address-level2" required="required">
+        </div>
 
-    <input type="reset" value="リセット">
-  </div>
+        <div class="item">
+        <label class="label">習い事：</label>
+        <input id="swimming" type="checkbox" name="lessons" value="swimming"><label for="swimming">水泳教室</label>
+        <input id="cram" type="checkbox" name="lessons" value="cram"><label for="cram">塾</label>
+        <input id="english" type="checkbox" name="lessons" value="english"><label for="english">英会話教室</label>
+        </div>
 
-</form>
-</div>
+        <div class="btn-area">
+        <input type="submit" value="該当エリアを表示">
+        
+        <input type="reset" value="リセット">
+        </div>
+        
+        </form>
+    </div>
 
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-  </body>
+    <hr>
+    
+</body>
 </html>

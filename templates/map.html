@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>map page</title>
+    <title>検索結果</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <style type="text/css">
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
        #map {
-        height: 80%;
-        width: 90%;
+        height: 60%;
+        width: 70%;
         margin-left: auto;
         margin-top: auto;
         margin-right: auto;
-        margin-bottom: auto;
+        margin-bottom: 30px;
 
       }
       /* Optional: Makes the sample page fill the window. */
@@ -22,91 +22,147 @@
         margin: 0;
         padding: 0;
       }
+
+      hr{
+  width: 60%;
+  border-width: 1.5px;
+  border-color: #43A047;
+  margin-bottom: 40px;
+  margin-top: 50px;
+}
+
+      header{
+  margin-top: 40px;
+  margin-bottom: 40px;
+  color: #43A047;
+}
+
+      h1{
+  font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+  text-align: center;
+}
+  .btn-area{
+    text-align: center;
+    margin-top: 15px;
+  }
     </style>
     
   </head>
   <body>
-
-    <h1>search results</h1>
+  <header>
+    <h1>検索結果</h1>
 
     <form class="back-button" method = "POST" action = "">{% csrf_token%}
       <div class="btn-area">
       <input type="button" value="検索条件を変更する" onClick="javascript:history.go(-1);">
       </div>
     </form>
+  </header>
+
+  <hr>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB8Yh7th8MH0X_hrUV2gtHYktjQql0TlHA"></script>
     <div id="map"></div>
 
     <script>
-      // 必要なicon取得
+      // 必要なアイコン取得
       var iconBase =
-            'https://developers.google.com/maps/documentation/javascript/examples/full/images/';
-          
-          var icons = {
-          library: {
-            icon: iconBase + 'library_maps.png'
+            'https://developers.google.com/maps/documentation/javascript/examples/full/images/';       
+      var icons = {
+        cram: {
+            url: 'http://drive.google.com/uc?export=view&id=10YSEzY8ZzAiqNvMixCBev2R6Wh3h_n9l',
+            size: new google.maps.Size(10,5),
+            color: '#FF0000',
           },
-          parking:{
-            icon: iconBase + 'parking_lot_maps.png'
-          }
-          };
+        swimming:{
+            url: 'http://drive.google.com/uc?export=view&id=1TTKX6w1jpz0JuKWNK47QT-HdqX9FZXLB',
+            size: new google.maps.Size(10,5),
+            color: '#bce2e8',
+          },
+        english:{
+
+          },
+        };
  
-      //マップ、マーカーの生成
+      //マップ、マーカー、サークルの生成
       var map;
       function initMap() {
-        var mapLatLng = new google.maps.LatLng({{station}});
+        var mapLatLng = new google.maps.LatLng{{location}};
         var Options = {
-        zoom: 15, //地図の縮尺値
+        zoom: 14, //地図の縮尺値
         center: mapLatLng
         };
+        // マップ作成
         map = new google.maps.Map(document.getElementById('map'), Options);
+        //マーカー作成
+        var marker = new google.maps.Marker({
+        position: new google.maps.LatLng{{location}},
+        map:map,
+        });
+        //インフォウィンドウ作成
+        var infowindow = new google.maps.InfoWindow({content: '{{address|safe}}'});
+        marker.addListener("click",function(){
+        infowindow.open(map,marker);});
+        // サークル作成
+        var walktime = [1,3,5,10,15,20];
+        for(let i = 0; i < walktime.length; i++){
+          var circle = new google.maps.Circle({
+          storokecolor: "#FF0000",
+          strokeOpacity: 0.2,
+          strokeWeight: 2,
+          fillColor: '#ff0000',
+          fillOpacity: 0.1,
+          map: map,
+          center: new google.maps.LatLng{{location}},
+          //徒歩1分=80mで計算
+          radius: 80 * walktime[i],
+          });
+        }
       }
-
-      function readTextFile(file,callback){
-        callback()
+    function readTextFile(file,callback){
+      callback()
       }
-
+    
       initMap();
 
-      // readTextFileをfor文で回したい
+      // jsonファイルの読み込み、setMarkerDataの呼び出し
       var lessons_index = {{lessons|safe}};
+      var num = 0
       readTextFile("",function(){
-        for (let i = 0; i < lessons_index.length; i++){
-          var json_file = `{{${lessons_index[i]}|safe}}`
-          var data = JSON.parse(json_file);
-          for (let j = 0; j <data.length; j++){
-            var element = data[j];
-            var lat = element["緯度"];
-            var lon = element["経度"];
-            var latlon = new google.maps.LatLng(lat,lon);
-            var marker = new google.maps.Marker({
-              position: latlon,
-              icon:icons["parking"].icon,
-              map: map
-            });
-            var circle = new google.maps.Circle({
-              storokecolor: "#FF0000",
-              strokeOpacity: 0.5,
-              strokeWeight: 2,
-              fillColor: '#FF0000',
-              fillOpacity: 0.05,
-              map: map,
-              center: latlon,
-              //徒歩1分=80mで計算
-              radius: 80 * {{walktime}}
-            });
+        {% for json_data in jsons %}
+           var data = JSON.parse('{{json_data|safe}}');
+           for (let j = 0; j <data.length; j++){
+
+            setMarkerData(data,j,num);
 
           }
-        }
-
+          num = num + 1;
+        {% endfor %}
       })
 
-
-  
+        //marker,infowindowを生成
+      function setMarkerData(data,j,num){
+        var element = data[j];
+        var lat = element["緯度"];
+        var lon = element["経度"];
+        var latlon = new google.maps.LatLng(lat,lon);
+        var marker = new google.maps.Marker({
+          position: latlon,
+          map: map,
+          icon: {
+            url: icons[lessons_index[num]].url,
+            scalesize: icons[lessons_index[num]].size,
+            }
+          })
+        var infowindow = new google.maps.InfoWindow({content: data[j]["店名"]});
+        marker.addListener("click",function(){
+        infowindow.open(map,marker);});
+        }
     </script>
 
-
+    <hr>
   </body>
 
 </html>
