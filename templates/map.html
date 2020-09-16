@@ -82,7 +82,9 @@
             color: '#bce2e8',
           },
         english:{
-
+          url: 'http://drive.google.com/uc?export=view&id=1QWqyUtemo2qsgNR3GxY2CTFHavP9yimA',
+          size:  new google.maps.Size(10,5),
+          color: '#bce2e8',
           },
         };
  
@@ -156,7 +158,7 @@
             scalesize: icons[lessons_index[num]].size,
             }
           })
-        var infowindow = new google.maps.InfoWindow({content: data[j]["店名"]});
+        var infowindow = new google.maps.InfoWindow({content: data[j]["施設名"]});
         marker.addListener("click",function(){
         infowindow.open(map,marker);});
         }
